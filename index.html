@@ -8,7 +8,38 @@
   </head>
   <body>
     <div id="app">
+      <h1>
+        <span><img src="./src/assets/champignon.png" alt></span>
+        Simple Mariogame
+        <span><img src="./src/assets/champignon.png" alt></span>
+      </h1>
+      <div class="game_container">
+        <div class="ui">
+          <p>
+            Score: <span id="score">0</span>
+          </p>
+          <p>
+            Level: <span id="level">1</span>
+          </p>
+          <p>
+            Lives: <span id="live">3</span>
+          </p>
+        </div>
+        <div id="game_area">
+          <div id="mario"></div>
+        </div>
+        <div class="controls">
+          <p>Controls</p>
+          <p>Arrow Keys: Move Left/Right</p>
+          <p>Down Arrow:Enter Pipe(when on top of it)</p>
+        </div>
+      </div>
 
+      <div class="game_over">
+        <h2 id="game_over_title">Game Over</h2>
+        <p>Score: <span id="final_score">0</span></p>
+        <button id="restart_buttin">Play Again </button>
+      </div>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

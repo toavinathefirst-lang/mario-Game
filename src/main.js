@@ -406,8 +406,28 @@ function update(){
                 }
             }
         }
+        //pipe interaction to next level
+        for (const pipe of gameObjects.pipes) {
+            if(player.grounded && 
+                player.x + player.width >pipe.x &&
+                player.x <pipe.x + pipe.width &&
+                Math.abs(player.y +player.height - pipe.y) < 5 &&
+                gameState.keys['ArrowDown']
+            ){
+                //nextLevel()
+            }
+        }
+
+        //fall Death
+        if(player.y >400){
+            //loseLife()
+        }
 
     updateElementPosition(player.element,player.x,player.y)
+
+    document.getElementById('score').textContent =gameState.score;
+    document.getElementById('level').textContent =gameState.level;
+    document.getElementById('lives').textContent =gameState.lives;
 }
 /**
  * 

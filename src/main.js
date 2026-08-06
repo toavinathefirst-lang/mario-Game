@@ -24,6 +24,7 @@ const player = {
     velocityX:0,
     velocityY:0,
     grounded:false,
+    big:false,
     bigTimer:0
 }
 
@@ -112,8 +113,30 @@ function loadLevel(levelIndex){
     }
     //clearLevel()
 
-    const level =levels(levelIndex)
+    const level =levels[levelIndex]
     const gameArea = document.getElementById("game_area")
+
+    //reste player
+    player.x=50;
+    player.y=300;
+    player.velocityX =0;
+    player.velocityY=0;
+    player.big=false;
+    player.bigTimer=0;
+    player.element.className="";
+    updateElementPosition(player.element,player.x,player.y);
+
+    //update platform
+}
+/**
+ * 
+ * @param {HTMLDivElement} playerElement 
+ * @param {number} playerX 
+ * @param {number} playerY 
+ */
+function updateElementPosition(playerElement,playerX,playerY){
+    playerElement.style.left=playerX+'px';
+    playerElement.style.top=playerY+"px"
 }
 function gameLoop(){
 
@@ -123,3 +146,5 @@ function gameLoop(){
 function clearLevel(){
 
 }
+
+initGame()

@@ -213,6 +213,29 @@ function loadLevel(levelIndex){
         })
     })
 
+     level.pipes.forEach((pipeData,index)=>{
+        const pipeBlock =createElement('div',`pipe`,{
+            left:pipeData.x +"px",
+            top:pipeData.y + 'px',
+        })
+        const pipeTopLeft = createElement("div","pipe_top");
+        const pipeTopRight = createElement("div","pipe_top_right");
+        const pipeBottomLeft = createElement("div","pipe_bottom");
+        const pipeBottomRight = createElement("div","pipe_bottom_right");
+
+        pipeBlock.append(pipeTopLeft,pipeTopRight,pipeBottomLeft,pipeBottomRight)
+        gameArea.appendChild(pipeBlock)
+        gameObjects.pipes.push({
+            element:pipeBlock,
+            x:pipeData.x,
+            y:pipeData.y,
+            width:40,
+            height:40,
+            
+            id:"pipe_"+index
+        })
+    })
+
 
 
 }

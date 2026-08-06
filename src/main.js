@@ -353,6 +353,35 @@ function update(){
         updateElementPosition(enemy.element,enemy.x,enemy.y)
 
         //check player enemy collision
+        if(checkCollision(player,enemy)){
+            if(player.velocityY >0 && player.y < enemy.y){
+                //jump on enemy
+                enemy.alive=false
+                enemy.element.remove()
+                player.velocityY = JUMP_FORCE*0.7
+                gameState.score+=100
+            }else{
+                //hit by enemy
+                if(player.big){
+                    player.big=false;
+                    player.bigTimer=0;
+                    player.element.classList.remove('big');
+                    player.width =20;
+                    player.height =20;
+                }else {
+                    //loseLife()
+                }
+            }
+        }
+
+        //coin Collection
+        for (let coin of gameObjects.coins){
+            if(!coin.collected && checkCollision(player,coin)){
+                coin.collected=true;
+                coin.element.remove()
+                gameState.score+=50
+            }
+        }
     }
 
     updateElementPosition(player.element,player.x,player.y)

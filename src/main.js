@@ -153,7 +153,28 @@ function loadLevel(levelIndex){
         })
     })
 
-    //
+    //create enemies
+
+    level.enemies.forEach(
+        (enemyData,index)=>{
+            const enemy =createElement("div",`enemy ${enemyData.type}`,{
+                left:enemyData.x+'px',
+                top:enemyData.y+'px'
+            })
+            gameArea.appendChild(enemy)
+            gameObjects.enemies.push({
+                element:enemy,
+                x:enemyData.x,
+                y:enemyData.y,
+                width:20,
+                height:20,
+                direction:-1,
+                speed:ENEMY_SPEED,
+                id:"enemy_"+index,
+                alive:true
+
+            })
+    })
 
 
 }

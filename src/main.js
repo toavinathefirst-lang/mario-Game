@@ -333,10 +333,26 @@ function update(){
                 break
             }
         }
-        if(!onPlatform || enemy.x <= 0 || enemy.x >=800){
+        let hitsPipe = false
+        const margin = 5
+        for (let pipe of gameObjects.pipes) {
+            const expandedPipe = {
+                x: pipe.x - margin,
+                y: pipe.y,
+                width: pipe.width + margin * 2,
+                height: pipe.height
+            }
+            if (checkCollision(enemy, expandedPipe)) {
+                hitsPipe = true
+                break
+            }
+        }
+        if(!onPlatform || enemy.x <= 0 || enemy.x >=800 || hitsPipe){
             enemy.direction *=-1
         }
         updateElementPosition(enemy.element,enemy.x,enemy.y)
+
+        //check player enemy collision
     }
 
     updateElementPosition(player.element,player.x,player.y)

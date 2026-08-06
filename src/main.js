@@ -108,7 +108,7 @@ function showGameOver(won){
 }
 
 function initGame (){
-    loadLevel((gameState.level -1))
+    loadLevel((gameState.level ))
     gameLoop()
 }
 /**
@@ -174,6 +174,24 @@ function loadLevel(levelIndex){
                 alive:true
 
             })
+    })
+
+    //create coins
+    level.coins.forEach((coinData,index)=>{
+        const coin =createElement('div',`coin`,{
+            left:coinData.x +"px",
+            top:coinData.y + 'px',
+        })
+        gameArea.appendChild(coin)
+        gameObjects.coins.push({
+            element:coin,
+            x:coinData.x,
+            y:coinData.y,
+            width:20,
+            height:20,
+            collected:false,
+            id:"coin_"+index
+        })
     })
 
 

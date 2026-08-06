@@ -202,7 +202,7 @@ function loadLevel(levelIndex){
             top:surpriseBLocksData.y + 'px',
         })
         gameArea.appendChild(surpriseBlock)
-        gameObjects.coins.push({
+        gameObjects.surpriseBlocks.push({
             element:surpriseBlock,
             x:surpriseBLocksData.x,
             y:surpriseBLocksData.y,
@@ -267,9 +267,9 @@ function update(){
     
     
     //move left and right
-    if(gameState.keys["ArrowLeft"] || gameState.keys["keysQ"]){
+    if(gameState.keys["ArrowLeft"] || gameState.keys["KeyQ"]){
         player.velocityX = -MOVE_SPEED
-    }else if(gameState.keys["ArrowRight"] || gameState.keys["keysD"]){
+    }else if(gameState.keys["ArrowRight"] || gameState.keys["KeyD"]){
         player.velocityX = MOVE_SPEED
     }else {
         player.velocityX *=0.8
@@ -313,6 +313,32 @@ function update(){
         }
     }
 
+    //enemy movement and collision
+    for(let enemy of gameObjects.enemies){
+        if(!enemy.alive){
+            continue;
+        }
+        enemy.x += enemy.speed * enemy.direction
+
+        let onPlatform = false
+        const edgeMargin =20
+        //reverse direction at platform edges or boundaries
+        for(let platform of gameObjects.platforms){
+            if(enemy.x + enemy.width > platform.x + edgeMargin&&
+                enemy.x < platform.x + platform.width - edgeMargin &&
+                enemy.y + enemy.height >= platform.y -5 && 
+                enemy.y +enemy.height <=platform.y+5
+            ){
+                onPlatform = true;
+                break
+            }
+        }
+        if(!onPlatform || enemy.x <= 0 || enemy.x >=800){
+            enemy.direction *=-1
+        }
+        updateElementPosition(enemy.element,enemy.x,enemy.y)
+    }
+
     updateElementPosition(player.element,player.x,player.y)
 }
 /**
@@ -345,7 +371,7 @@ function clearLevel(){
         platforms:[],
         enemies:[],
         coins:[],
-        surpriseBLocks:[],
+        surpriseBlocks:[],
         pipes:[]
     }
    

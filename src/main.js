@@ -386,23 +386,29 @@ function update(){
         }
 
         //surprise Blocks
-        for (const surpriseBlock of gameObjects.surpriseBlocks) {
-           if(!surpriseBlock.hit && 
-            checkCollision(player,surpriseBlock) && (player.velocityY<0)) {
-                surpriseBlock.hit=true;
-                surpriseBlock.element.classList.add('hit')
-                player.velocityY=0;
+       for (const surpriseBlock of gameObjects.surpriseBlocks) {
+            // Le bloc est solide par en dessous, qu'il soit déjà "hit" ou non
+            if (checkCollision(player, surpriseBlock) && player.velocityY < 0) {
+                
+                // Empêche Mario de traverser le bloc : il "cogne" et retombe
+                player.velocityY = 0;
+                player.y = surpriseBlock.y + surpriseBlock.height;
 
-                if(surpriseBlock.type === "mushroom"){
-                    player.big =true
-                    player.bigTimer=600;
-                    player.element.classList.add('big')
-                    player.width = 30;
-                    player.height =30;
-                    gameState.score +=100
+                // Le contenu (champignon/pièce) ne sort qu'au premier coup
+                if (!surpriseBlock.hit) {
+                    surpriseBlock.hit = true;
+                    surpriseBlock.element.classList.add('hit');
 
-                }else if (surpriseBlock.type === 'coin'){
-                    gameState.score+=50
+                    if (surpriseBlock.type === "mushroom") {
+                        player.big = true;
+                        player.bigTimer = 600;
+                        player.element.classList.add('big');
+                        player.width = 30;
+                        player.height = 30;
+                        gameState.score += 100;
+                    } else if (surpriseBlock.type === 'coin') {
+                        gameState.score += 50;
+                    }
                 }
             }
         }

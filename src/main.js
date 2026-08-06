@@ -2,7 +2,7 @@
 
 //Game constants 
 const GRAVITY = 0.5;
-const JUMP_FORCE = -12;
+const JUMP_FORCE = -10.5;
 const MOVE_SPEED=2.5;
 const ENEMY_SPEED=1;
 
@@ -291,10 +291,22 @@ function update(){
     player.y += player.velocityY
 
     //platform collision
+    player.grounded=false
     for(let platform of gameObjects.platforms){
         if(checkCollision(player,platform)){
             if(player.velocityY>0){
                 player.y = platform.y -player.height
+                player.velocityY=0;
+                player.grounded=true
+            }
+        }
+    }
+
+    //pipe collision 
+    for(let pipe of gameObjects.pipes){
+        if(checkCollision(player,pipe)){
+            if(player.velocityY>0){ //falling down onto pipe
+                player.y = pipe.y -player.height
                 player.velocityY=0;
                 player.grounded=true
             }

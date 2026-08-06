@@ -99,7 +99,7 @@ const levels = [
 
 
 function initGame (){
-    loadLevel(gameState.level)
+    loadLevel(gameState.level -1)
     gameLoop()
 }
 /**
@@ -126,8 +126,38 @@ function loadLevel(levelIndex){
     player.element.className="";
     updateElementPosition(player.element,player.x,player.y);
 
-    //update platform
+    
+    //create platform 
+    level.platforms.forEach((plateFormData,index)=>{
+       
+        const platform = createElement('div',`platform ${plateFormData.type}`,{
+            left:plateFormData.x+'px',
+            top: plateFormData.y+'px',
+            width:plateFormData.width+'px',
+            height:plateFormData.height+'px',
+        })
+        gameArea.appendChild(platform)
+        gameObjects.platforms.push({
+            element:platform,
+            ...plateFormData,
+            id:'platform_'+index
+        })
+    })
 }
+/**
+ * 
+ * @param {string} type 
+ * @param {string} className 
+ * 
+ */
+function createElement(type,className,styles={}){
+    const element=document.createElement('div');
+    element.className=className;
+    Object.assign(element.style,styles)
+    return element
+
+        
+    }
 /**
  * 
  * @param {HTMLDivElement} playerElement 

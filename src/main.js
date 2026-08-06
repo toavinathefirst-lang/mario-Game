@@ -1,7 +1,8 @@
+///mon code 
 
 //Game constants 
 const GRAVITY = 0.5;
-const JUMP_FORCE = 12;
+const JUMP_FORCE = -12;
 const MOVE_SPEED=2.5;
 const ENEMY_SPEED=1;
 
@@ -32,7 +33,7 @@ const player = {
     platforms:[],
     enemies:[],
     coins:[],
-    surpriseBLocks:[],
+    surpriseBlocks:[],
     pipes:[]
 }
 
@@ -107,7 +108,7 @@ function showGameOver(won){
 }
 
 function initGame (){
-    loadLevel((gameState.level -1)+2)
+    loadLevel((gameState.level -1))
     gameLoop()
 }
 /**
@@ -151,6 +152,10 @@ function loadLevel(levelIndex){
             id:'platform_'+index
         })
     })
+
+    //
+
+
 }
 /**
  * 
@@ -176,9 +181,13 @@ function updateElementPosition(playerElement,playerX,playerY){
     playerElement.style.left=playerX+'px';
     playerElement.style.top=playerY+"px"
 }
+function update(){
+
+}
 function gameLoop(){
-
-
+    if(!gameState.gameRunning) return 
+    update()
+    requestAnimationFrame(gameLoop)
 }
 
 function clearLevel(){
@@ -196,15 +205,22 @@ function clearLevel(){
         surpriseBLocks:[],
         pipes:[]
     }
-    //Input handling
-    document.addEventListener('keydown',e=>{
-        gameState.keys[e.code]=true
-
-        if (e.code =="Space") {
-            
-        }
-    })
-
+   
 }
+
+ //Input handling
+document.addEventListener('keydown',e=>{
+    gameState.keys[e.code]=true
+
+    if (e.code =="Space") {
+        e.preventDefault()
+    }
+})
+document.addEventListener('keyup',e=>{
+    gameState.keys[e.code]=false
+})
+
+
+
 
 initGame()

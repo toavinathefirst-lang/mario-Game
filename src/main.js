@@ -88,8 +88,8 @@ const levels = [
             {x: 570, y: 260}
         ],
         surpriseBlocks: [
-            {x: 200, y: 260, type: "coin"},
-            {x: 400, y: 220, type: "mushroom"}
+            {x: 200, y: 220, type: "coin"},
+            {x: 400, y: 200, type: "mushroom"}
         ],
         pipes: [
             {x: 750, y: 320}
@@ -374,7 +374,9 @@ function update(){
             }
         }
 
-        //coin Collection
+        
+    }
+    //coin Collection
         for (let coin of gameObjects.coins){
             if(!coin.collected && checkCollision(player,coin)){
                 coin.collected=true;
@@ -382,7 +384,28 @@ function update(){
                 gameState.score+=50
             }
         }
-    }
+
+        //surprise Blocks
+        for (const surpriseBlock of gameObjects.surpriseBlocks) {
+           if(!surpriseBlock.hit && 
+            checkCollision(player,surpriseBlock) && (player.velocityY<0)) {
+                surpriseBlock.hit=true;
+                surpriseBlock.element.classList.add('hit')
+                player.velocityY=0;
+
+                if(surpriseBlock.type === "mushroom"){
+                    player.big =true
+                    player.bigTimer=600;
+                    player.element.classList.add('big')
+                    player.width = 30;
+                    player.height =30;
+                    gameState.score +=100
+
+                }else if (surpriseBlock.type === 'coin'){
+                    gameState.score+=50
+                }
+            }
+        }
 
     updateElementPosition(player.element,player.x,player.y)
 }

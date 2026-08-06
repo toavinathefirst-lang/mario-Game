@@ -108,7 +108,7 @@ function showGameOver(won){
 }
 
 function initGame (){
-    loadLevel((gameState.level ))
+    loadLevel((gameState.level-1 ))
     gameLoop()
 }
 /**
@@ -193,6 +193,26 @@ function loadLevel(levelIndex){
             id:"coin_"+index
         })
     })
+
+    //create mysteryBlock
+    
+    level.surpriseBlocks.forEach((surpriseBLocksData,index)=>{
+        const surpriseBlock =createElement('div',`surprise_block`,{
+            left:surpriseBLocksData.x +"px",
+            top:surpriseBLocksData.y + 'px',
+        })
+        gameArea.appendChild(surpriseBlock)
+        gameObjects.coins.push({
+            element:surpriseBlock,
+            x:surpriseBLocksData.x,
+            y:surpriseBLocksData.y,
+            width:20,
+            height:20,
+            type:surpriseBLocksData.type,
+            id:"coin_"+index
+        })
+    })
+
 
 
 }

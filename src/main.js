@@ -264,7 +264,33 @@ function updateElementPosition(playerElement,playerX,playerY){
     playerElement.style.top=playerY+"px"
 }
 function update(){
+    
+    
+    //move left and right
+    if(gameState.keys["ArrowLeft"] || gameState.keys["keysQ"]){
+        player.velocityX = -MOVE_SPEED
+    }else if(gameState.keys["ArrowRight"] || gameState.keys["keysD"]){
+        player.velocityX = MOVE_SPEED
+    }else {
+        player.velocityX *=0.8
+    }
 
+    ///jumping
+    if(gameState.keys["Space"] && player.grounded){
+        player.velocityY+=JUMP_FORCE
+        player.grounded=false;
+    }
+
+    //Apply Gravity
+    if(!player.grounded){
+        player.velocityY +=GRAVITY
+    }
+
+    //update player position
+    player.x +=player.velocityX
+    player.y += player.velocityY
+
+    updateElementPosition(player.element,player.x,player.y)
 }
 function gameLoop(){
     if(!gameState.gameRunning) return 

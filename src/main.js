@@ -28,7 +28,7 @@ const player = {
     bigTimer:0
 }
 
-const gameObjects = {
+    let gameObjects = {
     platforms:[],
     enemies:[],
     coins:[],
@@ -119,7 +119,7 @@ function loadLevel(levelIndex){
         showGameOver(true)
         return
     }
-    //clearLevel()
+    clearLevel()
 
     const level =levels[levelIndex]
     const gameArea = document.getElementById("game_area")
@@ -182,6 +182,28 @@ function gameLoop(){
 }
 
 function clearLevel(){
+    //const gameArea = document.getElementById('game_area');
+    Object.values(gameObjects).flat().forEach(
+        obj=>{
+        if(obj.element && obj.element.parentNode){
+            obj.element.remove()
+        }
+    })
+    gameObjects={
+        platforms:[],
+        enemies:[],
+        coins:[],
+        surpriseBLocks:[],
+        pipes:[]
+    }
+    //Input handling
+    document.addEventListener('keydown',e=>{
+        gameState.keys[e.code]=true
+
+        if (e.code =="Space") {
+            
+        }
+    })
 
 }
 

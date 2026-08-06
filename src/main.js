@@ -19,7 +19,7 @@ const gameState = {
 const player = {
     element:document.getElementById("mario"),
     x:50,
-    y:50,
+    y:340,
     width:20,
     height:20,
     velocityX:0,
@@ -127,7 +127,7 @@ function loadLevel(levelIndex){
 
     //reste player
     player.x=50;
-    player.y=300;
+    player.y=340;
     player.velocityX =0;
     player.velocityY=0;
     player.big=false;

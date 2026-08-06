@@ -95,11 +95,19 @@ const levels = [
         ]
     }
 ]
-
-
+/**
+ * 
+ * @param {true} won 
+ */
+function showGameOver(won){
+    gameState.gameRunning = false;
+    document.getElementById("game_over_title").textContent = won?'COngratulations!you Won':"Game Over!";
+    document.getElementById('final_score').textContent=gameState.score;
+    document.getElementById('game_over').style.display='block'
+}
 
 function initGame (){
-    loadLevel(gameState.level -1)
+    loadLevel((gameState.level -1)+2)
     gameLoop()
 }
 /**
@@ -108,7 +116,7 @@ function initGame (){
  */
 function loadLevel(levelIndex){
     if(levelIndex >= levels.length){
-        //showGameOver(true)
+        showGameOver(true)
         return
     }
     //clearLevel()

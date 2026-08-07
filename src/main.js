@@ -272,8 +272,10 @@ function update(){
     //move left and right
     if(gameState.keys["ArrowLeft"] || gameState.keys["KeyQ"]){
         player.velocityX = -MOVE_SPEED
+         player.element.classList.add('facing_left')
     }else if(gameState.keys["ArrowRight"] || gameState.keys["KeyD"]){
         player.velocityX = MOVE_SPEED
+         player.element.classList.remove('facing_left')
     }else {
         player.velocityX *=0.8
     }

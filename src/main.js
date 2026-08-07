@@ -266,6 +266,65 @@ function updateElementPosition(playerElement,playerX,playerY){
     playerElement.style.left=playerX+'px';
     playerElement.style.top=playerY+"px"
 }
+/**
+ * @param {string} type
+ */
+function spawnItemBlock(block,type){
+    const gameArea = document.getElementById("game_area");
+    const item=document.createElement("div");
+
+    item.classList.add(type);
+    item.style.left=block.x+"px"
+    item.style.top =(block.y -20)+"px"
+    gameArea.appendChild(item)
+
+    const itemObj={
+        x:block.x,
+        y:block.y-20,
+        width:20,
+        height:20,
+        element:item,
+        velocityY:0
+    }
+
+    if(type === 'mushroom'){
+      const fallInterval = setInterval(()=>{
+        itemObj.velocityY += GRAVITY
+        itemObj.y += itemObj.velocityY
+
+        let onPlatform=false
+        for(let platform of gameObjects.platforms){
+            if(itemObj.x < platform.x + platform.width &&
+                itemObj.x + itemObj.width > platform.x &&
+                itemObj.y + itemObj.height >= platform.y &&
+                itemObj.y + itemObj.height <= platform.y +5
+            ){
+                onPlatform=true;
+                itemObj.y=platform.y-itemObj.height
+                itemObj.velocityY=0
+                item.remove()
+                break
+            }
+        }
+        item.style.top =itemObj.y + 'px'
+        if(onPlatform){
+            clearInterval(fallInterval)
+        }
+      },16)
+    } else if(type==="coin"){
+        let frames=0
+
+        const floatInterval = setInterval(()=>{
+            itemObj.y-=1
+            item.style.top =itemObj.y + 'px'
+            frames+=1
+            if(frames >=100){
+                clearInterval(floatInterval)
+                item.remove()
+            }
+        })
+       } 
+}
 function update(){
     
     
@@ -403,6 +462,7 @@ function update(){
                 if (!surpriseBlock.hit) {
                     surpriseBlock.hit = true;
                     surpriseBlock.element.classList.add('hit');
+                    spawnItemBlock(surpriseBlock,surpriseBlock.type)
 
                     if (surpriseBlock.type === "mushroom") {
                         player.big = true;
@@ -455,6 +515,9 @@ function checkCollision(element1,element2){
 }
 function loseLife(){
     gameState.lives --
+    if(gameState.score>=10){
+        gameState.score-=10
+    }
     if(gameState.lives<=0){
         showGameOver(false)
     }else{

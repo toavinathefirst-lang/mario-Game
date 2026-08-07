@@ -369,7 +369,7 @@ function update(){
                     player.width =20;
                     player.height =20;
                 }else {
-                    //loseLife()
+                    loseLife()
                 }
             }
         }
@@ -420,13 +420,13 @@ function update(){
                 Math.abs(player.y +player.height - pipe.y) < 5 &&
                 gameState.keys['ArrowDown']
             ){
-                //nextLevel()
+                nextLevel()
             }
         }
 
         //fall Death
         if(player.y >400){
-            //loseLife()
+            loseLife()
         }
 
     updateElementPosition(player.element,player.x,player.y)
@@ -435,6 +435,7 @@ function update(){
     document.getElementById('level').textContent =gameState.level;
     document.getElementById('lives').textContent =gameState.lives;
 }
+
 /**
  * 
  * @param {player | gameObjects} element1 
@@ -446,6 +447,30 @@ function checkCollision(element1,element2){
         (element1.x +element1.width >element2.x) && 
         (element1.y < element2.y + element2.height) &&
         (element1.y +element1.height > element2.y)
+}
+function loseLife(){
+    gameState.lives --
+    if(gameState.lives<=0){
+        showGameOver(false)
+    }else{
+        player.x=50
+        player.y=300
+        player.velocityX=0
+        player.velocityY=0
+        player.big=false
+        player.bigTimer=0
+        player.element.classList.remove("big")
+        player.width =20
+        player.height=20
+    }
+}
+function nextLevel(){
+    gameState.level++
+    if(gameState.level >levels.length){
+        showGameOver(true)
+    }else{
+        loadLevel(gameState.level -1)
+    }
 }
 function gameLoop(){
     if(!gameState.gameRunning) return 

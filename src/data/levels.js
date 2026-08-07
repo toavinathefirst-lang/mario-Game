@@ -81,6 +81,43 @@ const level2 = new LevelBuilder()
   .pipe(37, 16)
   .build();
 
+  const level4 = new LevelBuilder()
+ 
+  .platform(0, 6, 18, 'blue', 2)
+  .platform(11, 4, 18, 'ground', 2)
+  .platform(20, 3, 18, 'blue', 2)
+  .platform(28, 4, 18, 'ground', 2)
+  .platform(37, 5, 18, 'blue', 2)
+
+  
+  .platform(7, 2, 15, 'floating')
+  .platform(10, 1, 12, 'floating')
+  .platform(16, 2, 14, 'floating')
+  .platform(24, 2, 11, 'floating')
+  .platform(27, 1, 14, 'floating')
+  .platform(33, 2, 13, 'floating')
+
+  // Plus forte concentration d'ennemis
+  .enemy(12, 17, 'purple')
+  .enemy(17, 13, 'brown')
+  .enemy(21, 17, 'purple')
+  .enemy(29, 17, 'brown')
+  
+
+  // Pièces risquées
+  .coin(8, 13)
+  .coin(11, 10)
+  .coin(25, 9)
+  .coin(34, 11)
+
+  // Blocs surprise limités
+  .surpriseBlock(17, 10, 'mushroom')
+  .surpriseBlock(30, 13, 'coin')
+
+  // Tuyau final
+  .pipe(38, 16)
+  .build();
 
 
-export const levels = [level1, level2,level3];
+
+export const levels = [level1, level2,level3,level4];

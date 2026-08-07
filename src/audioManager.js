@@ -1,33 +1,44 @@
 export class AudioManager {
     constructor() {
-        // Chemins locaux vers vos fichiers téléchargés
-        this.sounds = {
-            bgm: new Audio("assets/audio/theme.mp3"),
-            jump: "assets/audio/jump.mp3",
-            gameOver: "assets/audio/mamma-mia.mp3",
-            hit: "assets/audio/hit.mp3",
-            pipe: "assets/audio/pipe.mp3",
-            fall: "assets/audio/fall.mp3"
+        // URLs résolues dynamiquement par Vite
+        this.soundPaths = {
+            bgm: new URL('./assets/audio/marioTheme.mp3', import.meta.url).href,
+            jump: new URL('./assets/audio/mario_jump.mp3', import.meta.url).href,
+            gameOver: new URL('./assets/audio/mamma-mia_caQRETK.mp3', import.meta.url).href,
+            hit: new URL('./assets/audio/sm64-mario-pain.mp3', import.meta.url).href,
+            pipe: new URL('./assets/audio/pipe.mp3', import.meta.url).href,
+            fall: new URL('./assets/audio/mario-falling.mp3', import.meta.url).href,
+            coin: new URL('./assets/audio/super-mario-coin-sound.mp3', import.meta.url).href,
+            mushroom: new URL('./assets/audio/01-power-up-mario.mp3', import.meta.url).href,
+            stomp:new URL('./assets/audio/mario-goomba-stomp.mp3', import.meta.url).href,
+            win:new URL('./assets/audio/victory-mario-series-hq-super-smash-bros.mp3', import.meta.url).href,
+            
         };
 
-        // Configuration musique de fond
-        this.sounds.bgm.loop = true;
-        this.sounds.bgm.volume = 0.4;
-
+        this.bgmAudio = null;
         this.isMuted = false;
         this.bgmStarted = false;
     }
 
-    // Démarre la musique de fond (gère le blocage de lecture automatique du navigateur)
     playBGM() {
         if (this.isMuted) return;
-        this.sounds.bgm.play().then(() => {
+
+        // Initialisation de la BGM si ce n'est pas encore fait
+        if (!this.bgmAudio) {
+            this.bgmAudio = new Audio(this.soundPaths.bgm);
+            this.bgmAudio.loop = true;
+            this.bgmAudio.volume = 0.4;
+        }
+
+        this.bgmAudio.play().then(() => {
             this.bgmStarted = true;
         }).catch(() => {
-            // Si le navigateur bloque l'autoplay, on débloque au premier clic/touche
+            // Déblocage sur premier clic ou touche en cas de blocage d'autoplay
             const unlockAudio = () => {
-                this.sounds.bgm.play();
-                this.bgmStarted = true;
+                if (this.bgmAudio) {
+                    this.bgmAudio.play();
+                    this.bgmStarted = true;
+                }
                 window.removeEventListener("keydown", unlockAudio);
                 window.removeEventListener("click", unlockAudio);
             };
@@ -36,19 +47,20 @@ export class AudioManager {
         });
     }
 
-    // Arrête la musique de fond
     stopBGM() {
-        this.sounds.bgm.pause();
-        this.sounds.bgm.currentTime = 0;
+        if (this.bgmAudio) {
+            this.bgmAudio.pause();
+            this.bgmAudio.currentTime = 0;
+        }
     }
 
-    // Joue un effet sonore (instancie un nouvel Audio pour permettre des sons simultanés)
-    playSFX(name, volume = 0.7) {
-        if (this.isMuted || !this.sounds[name]) return;
+    playSFX(name, volume = 0.1) {
+        if (this.isMuted || !this.soundPaths[name]) return;
 
-        const sfx = new Audio(this.sounds[name]);
+        const sfx = new Audio(this.soundPaths[name]);
         sfx.volume = volume;
-        sfx.play().catch(() => {}); // Évite d'interrompre le jeu si l'audio échoue
+        sfx.play().catch(err => console.warn(`Erreur lecture ${name}:`, err));
     }
 }
 
+export const audioManager = new AudioManager();

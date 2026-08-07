@@ -1,11 +1,9 @@
 import { MovingEntity } from './MovingEntity.js';
 import { CONFIG } from '../config.js';
-
+import { audioManager } from '../audioManager.js';
 export class Player extends MovingEntity {
   constructor(x, y) {
-    // Le HTML contient déjà <div id="mario"></div> : on le réutilise au lieu
-    // d'en créer un second (sinon le CSS, qui cible #mario par id, ne
-    // s'applique jamais au Mario réellement déplacé par le jeu).
+  
     const existingMarioEl = document.getElementById('mario');
     super(x, y, 20, 20, 'mario', existingMarioEl);
     this.big = false;
@@ -26,6 +24,7 @@ export class Player extends MovingEntity {
     if (keys['Space'] && this.grounded) {
       this.velocityY += CONFIG.JUMP_FORCE;
       this.grounded = false;
+      audioManager.playSFX('jump');
     }
   }
 

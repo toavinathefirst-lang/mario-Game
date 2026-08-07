@@ -4,7 +4,8 @@ import { ItemSpawner } from './items/ItemSpawner.js';
 import { levels } from './data/levels.js';
 import { CONFIG } from './config.js';
 
-import { AudioManager } from './audioManager.js';
+
+import { audioManager } from './audioManager.js';
 export class Game {
   constructor() {
     this.levelsData = levels;
@@ -13,7 +14,7 @@ export class Game {
     this.player = new Player(50, 340);
     this.gameArea.appendChild(this.player.element);
     this.currentLevel = null;
-    this.audioManager=new AudioManager()
+    
 
     this._bindInput();
     document.getElementById('restart_button').addEventListener('click', () => this.restart());
@@ -29,7 +30,7 @@ export class Game {
 
   start() {
     this._loadLevel(this.state.level - 1);
-    this.audioManager.playBGM();
+    audioManager.playBGM();
     this._loop();
   }
 
@@ -70,7 +71,9 @@ export class Game {
         const jumpingOnTop = this.player.velocityY > 0 && this.player.y < enemy.y;
         if (jumpingOnTop) {
           this.state.score += enemy.onStomped(this.player);
+          audioManager.playSFX("stomp",0.25)
         } else if (enemy.onTouchPlayer(this.player)) {
+          audioManager.playSFX('hit');
           this._loseLife();
         }
       }
@@ -80,6 +83,7 @@ export class Game {
   _handleCoins(coins) {
     for (const coin of coins) {
       if (!coin.collected && this.player.collidesWith(coin)) {
+        audioManager.playSFX("coin")
         coin.collect();
         this.state.score += 50;
       }
@@ -94,10 +98,12 @@ export class Game {
 
         block.activate(b => {
           if (b.type === 'mushroom') {
+            audioManager.playSFX("mushroom")
             ItemSpawner.spawnMushroom(b, level.platforms, this.gameArea);
             this.player.grow();
             this.state.score += 100;
           } else if (b.type === 'coin') {
+            audioManager.playSFX("coin")
             ItemSpawner.spawnCoin(b, this.gameArea);
             this.state.score += 50;
           }
@@ -114,13 +120,18 @@ export class Game {
         Math.abs(this.player.y + this.player.height - pipe.y) < 5;
 
       if (overPipe && this.state.keys['ArrowDown']) {
+        audioManager.playSFX('pipe');
         this._nextLevel();
       }
     }
   }
 
   _checkFallDeath() {
-    if (this.player.y > CONFIG.FALL_DEATH_Y) this._loseLife();
+    
+    if (this.player.y > CONFIG.FALL_DEATH_Y) {
+      this._loseLife()
+      audioManager.playSFX('fall');
+    };
   }
 
   _loseLife() {
@@ -145,6 +156,13 @@ export class Game {
 
   _gameOver(won) {
     this.state.running = false;
+    audioManager.stopBGM();
+    
+    if (!won) {
+      audioManager.playSFX('gameOver'); // Son Game Over ("Mamma Mia")
+    }else if(won){
+      audioManager.playSFX("win")
+    }
     document.getElementById('game_over_title').textContent =
       won ? 'Félicitations, vous avez gagné !' : 'Game Over !';
     document.getElementById('final_score').textContent = this.state.score;

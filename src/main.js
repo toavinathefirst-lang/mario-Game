@@ -284,12 +284,13 @@ function spawnItemBlock(block,type){
         width:20,
         height:20,
         element:item,
-        velocityY:0
+        velocityY:0,
+        frames:0
     }
 
     if(type === 'mushroom'){
-      const fallInterval = setInterval(()=>{
-        itemObj.velocityY += GRAVITY
+        function fall(){
+            itemObj.velocityY += GRAVITY
         itemObj.y += itemObj.velocityY
 
         let onPlatform=false
@@ -307,10 +308,12 @@ function spawnItemBlock(block,type){
             }
         }
         item.style.top =itemObj.y + 'px'
-        if(onPlatform){
-            clearInterval(fallInterval)
+        if(!onPlatform){
+            requestAnimationFrame(fall)
         }
-      },16)
+        }
+        fall()
+      
     } else if(type==="coin"){
         let frames=0
 
@@ -318,11 +321,11 @@ function spawnItemBlock(block,type){
             itemObj.y-=1
             item.style.top =itemObj.y + 'px'
             frames+=1
-            if(frames >=100){
+            if(frames >=50){
                 clearInterval(floatInterval)
                 item.remove()
             }
-        })
+        },5)
        } 
 }
 function update(){

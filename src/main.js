@@ -5,7 +5,7 @@ const GRAVITY = 0.5;
 const JUMP_FORCE = -10.5;
 const MOVE_SPEED=2.5;
 const ENEMY_SPEED=1;
-
+let animationFrameId = null;
 const gameState = {
     score:0,
     level:1,
@@ -133,6 +133,9 @@ function loadLevel(levelIndex){
     player.big=false;
     player.bigTimer=0;
     player.element.className="";
+
+    player.width = 20;
+    player.height = 20;
     updateElementPosition(player.element,player.x,player.y);
 
     
@@ -454,7 +457,7 @@ function loseLife(){
         showGameOver(false)
     }else{
         player.x=50
-        player.y=300
+        player.y=340
         player.velocityX=0
         player.velocityY=0
         player.big=false
@@ -472,10 +475,34 @@ function nextLevel(){
         loadLevel(gameState.level -1)
     }
 }
+function restartGame(){
+   
+
+    // Réinitialisation de l'état
+    gameState.score = 0;
+    gameState.level = 1;
+    gameState.lives = 3; 
+    gameState.gameRunning = true;
+    gameState.keys = {};
+
+    // Réinitialisation du joueur
+    player.big = false;
+    player.bigTimer = 0;
+    player.element.classList.remove("big");
+    player.width = 20;
+    player.height = 20;
+
+    
+    document.getElementById('game_over').style.display = 'none';
+    initGame()
+
+}
+const restart_Button = document.getElementById("restart_button")
+restart_Button.addEventListener("click",restartGame)
 function gameLoop(){
     if(!gameState.gameRunning) return 
     update()
-    requestAnimationFrame(gameLoop)
+    animationFrameId=requestAnimationFrame(gameLoop)
 }
 
 function clearLevel(){

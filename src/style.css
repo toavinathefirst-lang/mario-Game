@@ -218,4 +218,5 @@ body {
 
 #restart_button:hover {
     background-color: #ff5252;
+    cursor: pointer;
 }

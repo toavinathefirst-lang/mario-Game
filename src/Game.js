@@ -4,7 +4,7 @@ import { ItemSpawner } from './items/ItemSpawner.js';
 import { levels } from './data/levels.js';
 import { CONFIG } from './config.js';
 
-
+import { AudioManager } from './audioManager.js';
 export class Game {
   constructor() {
     this.levelsData = levels;
@@ -13,6 +13,7 @@ export class Game {
     this.player = new Player(50, 340);
     this.gameArea.appendChild(this.player.element);
     this.currentLevel = null;
+    this.audioManager=new AudioManager()
 
     this._bindInput();
     document.getElementById('restart_button').addEventListener('click', () => this.restart());
@@ -28,6 +29,7 @@ export class Game {
 
   start() {
     this._loadLevel(this.state.level - 1);
+    this.audioManager.playBGM();
     this._loop();
   }
 
@@ -147,6 +149,7 @@ export class Game {
       won ? 'Félicitations, vous avez gagné !' : 'Game Over !';
     document.getElementById('final_score').textContent = this.state.score;
     document.getElementById('game_over').style.display = 'block';
+    
   }
 
   _refreshHUD() {

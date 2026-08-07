@@ -1,10 +1,7 @@
 import { Entity } from './Entity.js';
 import { CONFIG } from '../config.js';
 
-/**
- * Tout ce qui a une vélocité + subit la gravité + peut atterrir sur un sol.
- * Player ET Enemy en héritent : plus de code de gravité/atterrissage dupliqué.
- */
+
 export class MovingEntity extends Entity {
   constructor(x, y, width, height, className, existingElement = null) {
     super(x, y, width, height, className, existingElement);

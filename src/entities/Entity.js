@@ -1,9 +1,5 @@
 import { CollisionUtils } from '../utils/CollisionUtils.js';
 
-/**
- * Classe de base pour TOUT ce qui est affiché dans #game_area.
- * Gère uniquement : position, taille, élément DOM, rendu, collision.
- */
 export class Entity {
   /**
    * @param {number} x
@@ -11,8 +7,7 @@ export class Entity {
    * @param {number} width
    * @param {number} height
    * @param {string} className
-   * @param {HTMLElement|null} existingElement Réutilise cet élément DOM au lieu
-   *   d'en créer un nouveau (utile pour #mario, déjà présent dans le HTML).
+   * @param {HTMLElement|null} existingElement 
    */
   constructor(x, y, width, height, className, existingElement = null) {
     this.x = x;

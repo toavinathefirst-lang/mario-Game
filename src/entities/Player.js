@@ -50,6 +50,9 @@ export class Player extends MovingEntity {
     this.velocityX = 0;
     this.velocityY = 0;
     this.shrink();
+
+    this.isInvincible = true;
+    setTimeout(() => { this.isInvincible = false; }, 1000);
   }
 
   update(keys, solids) {

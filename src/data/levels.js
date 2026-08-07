@@ -51,4 +51,36 @@ const level2 = new LevelBuilder()
   .pipe(37, 16)
   .build();
 
-export const levels = [level1, level2];
+  const level3 = new LevelBuilder()
+  // Sol principal en alternant 'ground' et 'blue' (spawn libre entre col 0 et 8)
+  .platform(0, 8, 18, 'ground', 2)
+  .platform(12, 6, 18, 'blue', 2)
+  .platform(22, 6, 18, 'ground', 2)
+  .platform(32, 8, 18, 'blue', 2)
+
+  // Plateformes flottantes
+  .platform(8, 3, 14, 'floating')
+  .platform(18, 3, 12, 'floating')
+  .platform(28, 3, 14, 'floating')
+
+  // Ennemis (uniquement 'brown' et 'purple', placés loin du spawn x=50)
+  .enemy(14, 17, 'brown')
+  .enemy(24, 17, 'purple')
+  .enemy(34, 17, 'brown')
+
+  // Pièces
+  .coin(9, 12)
+  .coin(19, 10)
+  .coin(29, 12)
+
+  // Blocs surprise
+  .surpriseBlock(14, 13, 'mushroom')
+  .surpriseBlock(24, 13, 'coin')
+
+  // Tuyau final
+  .pipe(37, 16)
+  .build();
+
+
+
+export const levels = [level1, level2,level3];

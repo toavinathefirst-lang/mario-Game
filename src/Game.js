@@ -40,6 +40,8 @@ export class Game {
       return;
     }
     if (this.currentLevel) this.currentLevel.clear();
+
+    const cleanLevelData = JSON.parse(JSON.stringify(this.levelsData[index]));
     this.currentLevel = new Level(this.levelsData[index], this.gameArea);
     this.currentLevel.load();
     this.player.reset(50, 340);

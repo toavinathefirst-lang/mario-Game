@@ -4,11 +4,11 @@ import { CONFIG } from '../../config.js';
 
 
 export class Enemy extends MovingEntity {
-  constructor(x, y, type) {
+  constructor(x, y, type, speed = CONFIG.ENEMY_SPEED) {
     super(x, y, 20, 20, `enemy ${type}`);
     this.type = type;
     this.direction = -1;
-    this.speed = CONFIG.ENEMY_SPEED;
+    this.speed = speed;
     this.alive = true;
   }
 

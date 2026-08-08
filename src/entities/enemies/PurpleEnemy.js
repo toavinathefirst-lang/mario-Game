@@ -3,12 +3,12 @@ import { CONFIG } from '../../config.js';
 
 
 export class PurpleEnemy extends Enemy {
-  constructor(x, y) {
-    super(x, y, 'purple');
+  constructor(x, y,speed = CONFIG.ENEMY_SPEED * 1.1) {
+    super(x, y, 'purple',speed);
   }
 
   patrol(platforms, pipes) {
-    this.speed = CONFIG.ENEMY_SPEED * 1.3;
+    
     super.patrol(platforms, pipes);
   }
 }

@@ -4,11 +4,11 @@ import { Enemy } from './Enemy.js';
 
 
 export class EnemyFactory {
-  static create(x, y, type) {
+  static create(x, y, type,speed) {
     switch (type) {
-      case 'brown': return new BrownEnemy(x, y);
-      case 'purple': return new PurpleEnemy(x, y);
-      default: return new Enemy(x, y, type);
+      case 'brown': return speed !=null ? new BrownEnemy(x, y,speed) :new BrownEnemy(x, y);
+      case 'purple': return speed != null ? new PurpleEnemy(x, y, speed) : new PurpleEnemy(x, y);
+      default: return new Enemy(x, y, type,speed);
     }
   }
 }

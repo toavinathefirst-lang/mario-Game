@@ -23,7 +23,7 @@ export class Level {
 
   load() {
     this.data.platforms.forEach(d => this._spawn(this.platforms, new Platform(d.x, d.y, d.width, d.height, d.type)));
-    this.data.enemies.forEach(d => this._spawn(this.enemies, EnemyFactory.create(d.x, d.y, d.type)));
+    this.data.enemies.forEach(d => this._spawn(this.enemies, EnemyFactory.create(d.x, d.y, d.type,d.speed)));
     this.data.coins.forEach(d => this._spawn(this.coins, new Coin(d.x, d.y)));
     this.data.surpriseBlocks.forEach(d => this._spawn(this.surpriseBlocks, new SurpriseBlock(d.x, d.y, d.type)));
     this.data.pipes.forEach(d => this._spawn(this.pipes, new Pipe(d.x, d.y)));

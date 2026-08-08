@@ -33,8 +33,8 @@ export class LevelBuilder {
     return this;
   }
 
-  enemy(col, row, type) {
-    this.data.enemies.push({ x: col * this.tileSize, y: row * this.tileSize, type });
+  enemy(col, row, type,speed) {
+    this.data.enemies.push({ x: col * this.tileSize, y: row * this.tileSize, type ,speed});
     return this;
   }
 

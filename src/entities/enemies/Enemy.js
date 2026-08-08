@@ -12,15 +12,15 @@ export class Enemy extends MovingEntity {
     this.alive = true;
   }
 
-  patrol(platforms, pipes) {
+ patrol(platforms, pipes, levelWidth) { 
     this.x += this.speed * this.direction;
-    if (this.shouldTurnAround(platforms, pipes)) {
+    if (this.shouldTurnAround(platforms, pipes, levelWidth)) {
       this.direction *= -1;
     }
-  }
+}
 
   /** Redéfinissable par une sous-classe pour un comportement différent */
-  shouldTurnAround(platforms, pipes) {
+ shouldTurnAround(platforms, pipes, levelWidth) {
     const edgeMargin = 20;
     const onPlatform = platforms.some(p =>
       this.x + this.width > p.x + edgeMargin &&
@@ -35,19 +35,19 @@ export class Enemy extends MovingEntity {
       return CollisionUtils.isColliding(this, expanded);
     });
 
-    return !onPlatform || this.x <= 0 || this.x >= CONFIG.WORLD_WIDTH || hitsPipe;
-  }
+    return !onPlatform || this.x <= 0 || this.x + this.width >= levelWidth || hitsPipe;
+}
 
   die() {
     this.alive = false;
     this.remove();
   }
 
-  update(platforms, pipes) {
+  update(platforms, pipes, levelWidth) { 
     if (!this.alive) return;
-    this.patrol(platforms, pipes);
+    this.patrol(platforms, pipes, levelWidth);
     this.render();
-  }
+}
 
   /** Le joueur saute dessus -> renvoie les points gagnés */
   onStomped(player) {

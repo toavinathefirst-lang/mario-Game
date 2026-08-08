@@ -5,9 +5,15 @@ import { SurpriseBlock } from '../entities/SurpriseBlock.js';
 import { EnemyFactory } from '../entities/enemies/EnemyFactory.js';
 
 export class Level {
+    /**
+   * @param {object} data
+   * @param {HTMLElement} worldElement le div #world
+   */
   constructor(data, gameArea) {
     this.data = data;
     this.gameArea = gameArea;
+    this.width = data.width;
+    this.height = data.height || null;
     this.platforms = [];
     this.enemies = [];
     this.coins = [];

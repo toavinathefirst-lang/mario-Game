@@ -5,6 +5,15 @@ export class LevelBuilder {
     this.tileSize = tileSize;
     this.data = { platforms: [], enemies: [], coins: [], surpriseBlocks: [], pipes: [] };
   }
+  /**
+   * 
+   * @param {number} cols 
+   * @returns 
+   */
+  setWidth(cols) {
+    this.data.width = cols * this.tileSize;
+    return this;
+  }
 
   /**
    * @param {number} colStart case de départ (colonne)
@@ -45,6 +54,14 @@ export class LevelBuilder {
   }
 
   build() {
+     if (!this.data.width) {
+      const maxCol = Math.max(
+        ...this.data.platforms.map(p => (p.x + p.width) / this.tileSize),
+        ...this.data.pipes.map(p => p.x / this.tileSize + 2),
+        40
+      );
+      this.data.width = maxCol * this.tileSize;
+    }
     return this.data;
   }
 }

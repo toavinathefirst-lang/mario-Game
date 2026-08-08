@@ -3,6 +3,7 @@ import { Level } from './level/Level.js';
 import { ItemSpawner } from './items/ItemSpawner.js';
 import { levels } from './data/levels.js';
 import { CONFIG } from './config.js';
+import { Camera } from './entities/camera.js';
 
 
 import { audioManager } from './audioManager.js';
@@ -10,10 +11,13 @@ export class Game {
   constructor() {
     this.levelsData = levels;
     this.gameArea = document.getElementById('game_area');
+    this.worldElement = document.getElementById('world'); 
     this.state = { score: 0, level: 1, lives: 3, running: true, keys: {} };
     this.player = new Player(50, 340);
-    this.gameArea.appendChild(this.player.element);
+    this.worldElement.appendChild(this.player.element);
+
     this.currentLevel = null;
+    this.camera = new Camera(this.gameArea.clientWidth, this.gameArea.clientHeight, this.worldElement);
     
 
     this._bindInput();
@@ -42,8 +46,10 @@ export class Game {
     if (this.currentLevel) this.currentLevel.clear();
 
     const cleanLevelData = JSON.parse(JSON.stringify(this.levelsData[index]));
-    this.currentLevel = new Level(this.levelsData[index], this.gameArea);
+    this.currentLevel = new Level(this.levelsData[index], this.worldElement);
     this.currentLevel.load();
+
+     this.camera.setLevel(this.currentLevel); 
     this.player.reset(50, 340);
   }
 
@@ -62,10 +68,14 @@ export class Game {
     this._handlePipeTransition(level.pipes);
     this._checkFallDeath();
     this._refreshHUD();
+
+    this.camera.follow(this.player);
+    this.camera.render();
   }
 
   _updateEnemies(level) {
     for (const enemy of level.enemies) {
+      enemy.update(level.platforms, level.pipes, level.width);
       enemy.update(level.platforms, level.pipes);
       if (!enemy.alive) continue;
 
@@ -73,9 +83,9 @@ export class Game {
         const jumpingOnTop = this.player.velocityY > 0 && this.player.y < enemy.y;
         if (jumpingOnTop) {
           this.state.score += enemy.onStomped(this.player);
-          audioManager.playSFX("stomp",0.25)
+          audioManager.playSFX("stomp",0.7)
         } else if (enemy.onTouchPlayer(this.player)) {
-          audioManager.playSFX('hit');
+          audioManager.playSFX('hit',0.4);
           this._loseLife();
         }
       }
@@ -85,7 +95,7 @@ export class Game {
   _handleCoins(coins) {
     for (const coin of coins) {
       if (!coin.collected && this.player.collidesWith(coin)) {
-        audioManager.playSFX("coin")
+        audioManager.playSFX("coin",1)
         coin.collect();
         this.state.score += 50;
       }
@@ -101,12 +111,12 @@ export class Game {
         block.activate(b => {
           if (b.type === 'mushroom') {
             audioManager.playSFX("mushroom")
-            ItemSpawner.spawnMushroom(b, level.platforms, this.gameArea);
+            ItemSpawner.spawnMushroom(b, level.platforms, this.worldElement);
             this.player.grow();
             this.state.score += 100;
           } else if (b.type === 'coin') {
             audioManager.playSFX("coin")
-            ItemSpawner.spawnCoin(b, this.gameArea);
+            ItemSpawner.spawnCoin(b, this.worldElement);
             this.state.score += 50;
           }
         });
@@ -122,7 +132,7 @@ export class Game {
         Math.abs(this.player.y + this.player.height - pipe.y) < 5;
 
       if (overPipe && this.state.keys['ArrowDown']) {
-        audioManager.playSFX('pipe');
+        audioManager.playSFX('pipe',0.7);
         this._nextLevel();
       }
     }
@@ -144,6 +154,7 @@ export class Game {
       this._gameOver(false);
     } else {
       this.player.reset(50, 340);
+      this.camera.setLevel(this.currentLevel); 
     }
   }
 
@@ -161,9 +172,9 @@ export class Game {
     audioManager.stopBGM();
     
     if (!won) {
-      audioManager.playSFX('gameOver'); // Son Game Over ("Mamma Mia")
+      audioManager.playSFX('gameOver',0.8); // Son Game Over ("Mamma Mia")
     }else if(won){
-      audioManager.playSFX("win")
+      audioManager.playSFX("win",1)
     }
     document.getElementById('game_over_title').textContent =
       won ? 'Félicitations, vous avez gagné !' : 'Game Over !';
@@ -185,6 +196,7 @@ export class Game {
     this.state.running = true;
     this.state.keys = {};
     document.getElementById('game_over').style.display = 'none';
+    audioManager.playSFX("restart",0.5)
     this.start();
   }
 }

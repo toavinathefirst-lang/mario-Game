@@ -12,6 +12,7 @@ export class AudioManager {
             mushroom: new URL('./assets/audio/01-power-up-mario.mp3', import.meta.url).href,
             stomp:new URL('./assets/audio/mario-goomba-stomp.mp3', import.meta.url).href,
             win:new URL('./assets/audio/victory-mario-series-hq-super-smash-bros.mp3', import.meta.url).href,
+            restart:new URL('./assets/audio/sm64_mario_lets_go.mp3', import.meta.url).href,
             
         };
 
